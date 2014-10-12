@@ -1,0 +1,23 @@
+{
+  "name": "iceparser",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha spec/parser.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sonario/iceparser.git"
+  },
+  "author": "Dima Kurguzov <koorgoo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sonario/iceparser/issues"
+  },
+  "homepage": "https://github.com/sonario/iceparser",
+  "devDependencies": {
+    "jshint": "^2.5.6",
+    "mocha": "^1.21.5"
+  }
+}
