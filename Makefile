@@ -1,10 +1,10 @@
-MOCHA=node_modules/mocha/bin/mocha
+NODEUNIT=node_modules/nodeunit/bin/nodeunit
 JSHINT=node_modules/jshint/bin/jshint
 
-mocha m:
-	$(MOCHA) spec/*.spec.js
+test t:
+	$(NODEUNIT) test/test-*.js
 
-jshint j:
-	$(JSHINT) index.js spec/*.js
+lint l:
+	$(JSHINT) index.js test/*.js
 
-.PHONY: mocha jshint
+.PHONY: test lint
