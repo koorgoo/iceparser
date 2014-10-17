@@ -45,3 +45,22 @@ exports['accept arg[length] in step\'s rule'] = function(test) {
   test.deepEqual(data, {title: 'one two three', first: ['one', 'two'], last: 'three'});
   test.done();
 };
+
+exports['parser parse with few steps in series'] = function(test) {
+  var meta = toMeta({title: 'Artist &amp; A/Artist B - Song'});
+  var steps = [
+    {name: 'title', rule: [/(.*)\s-\s(.*)/, '_artist', 'title']},
+    {name: '_artist', rule: [/(.*)\/(.*)/, 'artists[]']}
+  ];
+  var data = new Parser(steps).parse(meta);
+  test.deepEqual(data, {artists: ['Artist &amp; A', 'Artist B'], title: 'Song'});
+  test.done();
+};
+
+exports['parser parse with options'] = function(test) {
+  var meta = toMeta({title: 'SONG &amp; SONG'});
+  var steps = {name: 'title', rule: [/(.*)/, 'title'], options: {html: true, lower: true}};
+  var data = new Parser(steps).parse(meta);
+  test.deepEqual(data, {title: 'song & song'});
+  test.done();
+};

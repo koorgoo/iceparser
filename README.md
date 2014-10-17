@@ -15,13 +15,22 @@ npm install iceparser
 
 ```js
 var ice = require('iceparser');
-var meta = "StreamTitle='nirvana - smells like teen spirit';";
+var meta = "StreamTitle='NIRVANA - Smells Like Teen Spirit';";
 
-ice.parse(meta);  // {title: 'nirvana - smells like teen spirit'}
+ice.parse(meta);  // {title: 'NIRVANA - Smells Like Teen Spirit'}
 
-// Initialize instance with rules object
 var rule = [/([\w\s]+)\s\-\s([\w\s]+)/, 'artist', 'title'];
-var parser = new ice({title: rule});
+var step = {name: 'title', rule: rule, options: {lower: true}};
+var parser = new ice(step);  // Initialize with step object or steps array
 
 parser.parse(meta);  // {artist: 'nirvana', title: 'smells like teen spirit'}
+```
+
+#### Step Options
+
+```js
+{
+    html: true|false,   // decode HTML
+    lower: true|false   // convert to lower case
+}
 ```
