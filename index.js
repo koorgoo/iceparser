@@ -1,5 +1,6 @@
-function Parser(rules) {
-  this.rules = rules || {};
+function Parser(steps) {
+  steps = steps || [];
+  this.steps = _isObject(steps) ? [steps] : steps;
 }
 
 
@@ -13,34 +14,73 @@ Parser.prototype.parse = function(meta) {
   var parts = meta.split(';');
 
   for (var i = 0; i < parts.length; i++) {
-    var ps = splitOnce(parts[i], '=');
-    var prop = trimPrefix(ps[0], 'Stream');
-    var value = trimQuotes(ps[1]);
+    var ps = _splitOnce(parts[i], '=');
+    var prop = _trimPrefix(ps[0], 'Stream');
+    var value = _trimQuotes(ps[1]);
     if (value.length) data[prop] = value;
+  }
 
-    var match = this._applyRule(prop, value);
-    for (var p in match) data[p] = match[p];
+  return this._walk(data);
+};
+
+
+Parser.prototype._walk = function(data) {
+  for (var i = 0; i < this.steps.length; i++)
+    this._step(this.steps[i], data)
+  return data;
+}
+
+
+Parser.prototype._step = function(step, data) {
+  if (data[step.name] == null) return data;
+
+  var s = data[step.name];
+  var rule = step.rule;
+
+  var match = s.match(rule[0]);
+  var argCounter = 0;
+  var prev, value;
+
+  for (var i = 1; i < match.length; i++) {
+    if (prev && _isArray(prev.value) && (prev.length == Infinity || prev.length > 0)) {
+      prev.value.push(match[i]);
+      prev.length--;
+      continue;
+    }
+
+    prev = this._create(rule[++argCounter]);
+    value = match[i];
+
+    if (_isArray(prev.value)) {
+      prev.value.push(value);
+      prev.length--;
+    } else prev.value = value;
+
+    data[prev.name] = prev.value;
   }
 
   return data;
 };
 
 
-Parser.prototype._applyRule = function(name, s) {
-  var rule = this.rules[name];
-  /* jshint eqnull:true */
-  if (rule == null) return {};
- 
-  var data = {};
-  var match = s.match(rule[0]);
-  for (var i = 1; i < rule.length; i++)
-    data[rule[i]] = match[i];
+Parser.prototype._create = function(argument) {
+  var arg = {};
+  var match = argument.match(/\[(\d*)\]/);
 
-  return data;
+  if (match) {
+    arg.value = [];
+    arg.name = argument.split('[')[0];
+    arg.length = match[1] || Infinity;
+  } else {
+    arg.value = '';
+    arg.name = argument;
+  }
+
+  return arg;
 };
 
 
-function splitOnce(s, separator) {
+function _splitOnce(s, separator) {
   var parts = s.split(separator);
   if (parts.length > 2) {
     var one = parts[0];
@@ -55,7 +95,7 @@ function splitOnce(s, separator) {
 }
 
 
-function trimPrefix(s, prefix) {
+function _trimPrefix(s, prefix) {
   if (s.indexOf(prefix) ===  0) {
     s = s.slice(prefix.length);
     s = s[0].toLowerCase() + s.slice(1);
@@ -64,12 +104,22 @@ function trimPrefix(s, prefix) {
 }
 
 
-function trimQuotes(s) {
+function _trimQuotes(s) {
   /* jshint eqnull:true */
  if (s == null) return '';
  else return s.replace(/^\'(.*)\'$/, function(m, text) {
   return text;
  });
+}
+
+
+function _isObject(o) {
+  return Object.prototype.toString.call(o) === '[object Object]';
+}
+
+
+function _isArray(a) {
+  return Object.prototype.toString.call(a) === '[object Array]';
 }
 
 
