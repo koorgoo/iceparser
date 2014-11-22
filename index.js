@@ -1,4 +1,4 @@
-var ent = require('ent');
+var he = require('he');
 
 
 function OptionsProcessor(opts) {
@@ -10,7 +10,7 @@ function OptionsProcessor(opts) {
 
 OptionsProcessor.prototype.process = function(value) {
   if (this.options.html)
-    value = ent.decode(value);
+    value = he.decode(value);
 
   if (this.options.lower)
     value = value.toLowerCase();
