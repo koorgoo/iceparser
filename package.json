@@ -1,22 +1,22 @@
 {
   "name": "iceparser",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sonario/iceparser.git"
+    "url": "https://github.com/koorgoo/iceparser.git"
   },
   "author": "Dima Kurguzov <koorgoo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sonario/iceparser/issues"
+    "url": "https://github.com/koorgoo/iceparser/issues"
   },
-  "homepage": "https://github.com/sonario/iceparser",
+  "homepage": "https://github.com/koorgoo/iceparser",
   "devDependencies": {
     "jshint": "^2.5.6",
     "nodeunit": "^0.9.0",
-    "titlize": "^0.1.1"
+    "titlize": "github:koorgoo/titlize"
   },
   "dependencies": {
     "ent": "^2.0.0"

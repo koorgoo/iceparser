@@ -7,7 +7,7 @@ Icecast stream metadata parser for Node.js
 ### Install
 
 ```shell
-npm install iceparser
+npm install koorgoo/iceparser
 ```
 
 
