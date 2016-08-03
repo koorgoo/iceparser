@@ -19,6 +19,6 @@
     "titlize": "github:koorgoo/titlize"
   },
   "dependencies": {
-    "ent": "^2.0.0"
+    "he": "^0.5.0"
   }
 }
